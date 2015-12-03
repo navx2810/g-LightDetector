@@ -37,7 +37,7 @@ public class ProbeGenerator : MonoBehaviour
 
         area = GetComponent<BoxCollider>();
         AreaSize = area.size;
-        AreaSize.y = 1;
+        //AreaSize.y = 1;
         var current_location = transform.position;
 
         // Get the locations, these display in the SCENE view as colored sphers
@@ -49,7 +49,7 @@ public class ProbeGenerator : MonoBehaviour
         HeightCount = (int)Mathf.Floor(AreaSize.z / ProbeSize);
 
         // Offset for the bounds, otherwise the colliders would start in the center of the start location, meaning outside the box
-        var offset = new Vector3(ProbeSize / 2, 1, ProbeSize / 2);
+        var offset = new Vector3(ProbeSize / 2, AreaSize.y - ProbeSize / 2, ProbeSize / 2);
         
 
         for(var y = 0; y < HeightCount; y++)
@@ -72,7 +72,7 @@ public class ProbeGenerator : MonoBehaviour
         // Make the probe a child of the "this" in the hierarchy
         go.transform.parent = transform;
 
-        go.transform.position = StartLocation + offset + new Vector3(ProbeSize * x, 1, ProbeSize * y);
+        go.transform.position = StartLocation + offset + new Vector3(ProbeSize * x, 0, ProbeSize * y);
 
         // The layer is Layer 9 or Probe layer, Check the Project Settings > Physics to see the collision
         // Lights collide with Probes, but Probes don't collide with Probes
@@ -83,11 +83,14 @@ public class ProbeGenerator : MonoBehaviour
         // Unless I'm missing something here, I could have sworn two Triggers could, well, trigger without having to have a rigidbody
         var rb = go.AddComponent<Rigidbody>();
         // Disable the physics system from using this probe
-        rb.isKinematic = true;
+        //rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+
 
         var col = go.AddComponent<BoxCollider>();
         col.size = Vector3.one * ProbeSize;         // instead you could use new Vector3(ProbeSize, 1f, ProbeSize) if you don't need the height value
-        col.isTrigger = true;
+        //col.isTrigger = true;
+
 
         var probe = go.AddComponent<Probe>();
         probe.size = ProbeSize;

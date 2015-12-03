@@ -13,7 +13,7 @@ public class Probe : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if(target != other) { return; }
+        if (target != other) { return; }
 
         IsInsideLight = false;
         target = null;
@@ -21,7 +21,7 @@ public class Probe : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(target != null) { return; }
+        if (target != null) { return; }
 
         IsInsideLight = true;
         target = other;
